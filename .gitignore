@@ -1,0 +1,7 @@
+bitcoin.conf
+
+.env
+!.env.example
+
+.idea
+node_modules
