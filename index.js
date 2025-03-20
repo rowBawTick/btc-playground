@@ -6,12 +6,23 @@ const client = new Client({
   network: 'regtest',
   username: process.env.RPC_USERNAME,
   password: process.env.RPC_PASSWORD,
-  port: process.env.RPC_PORT,
-  host: process.env.RPC_HOST
+  host: `${process.env.RPC_HOST}:${process.env.RPC_PORT}`
 });
 
 async function main() {
   try {
+    // Create and load wallet if it doesn't exist
+    try {
+      await client.createWallet('regtest_wallet');
+      console.log('Created new wallet: regtest_wallet');
+    } catch (walletError) {
+      if (walletError.code === -4) {
+        console.log('Wallet already exists, loading it...');
+      } else {
+        throw walletError;
+      }
+    }
+
     // Fetch basic blockchain info
     const info = await client.getBlockchainInfo();
     console.log('Blockchain Info:', info);
