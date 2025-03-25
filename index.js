@@ -6,7 +6,8 @@ const client = new Client({
   network: 'regtest',
   username: process.env.RPC_USERNAME,
   password: process.env.RPC_PASSWORD,
-  host: `${process.env.RPC_HOST}:${process.env.RPC_PORT}`
+  host: `${process.env.RPC_HOST}:${process.env.RPC_PORT}`,
+  wallet: 'regtest_wallet'
 });
 
 async function main() {
@@ -18,6 +19,13 @@ async function main() {
     } catch (walletError) {
       if (walletError.code === -4) {
         console.log('Wallet already exists, loading it...');
+        try {
+          await client.loadWallet('regtest_wallet');
+        } catch (loadError) {
+          if (loadError.code !== -4 && loadError.code !== -35) {
+            throw loadError;
+          }
+        }
       } else {
         throw walletError;
       }

@@ -23,19 +23,18 @@ npm install
 ```
 3. Set up your environment:
    - Copy `.env.example` to `.env`
-   - Update the `.env` file with your settings
+   - Update the `.env` file with your settings (it should match the bitcoin.conf)
 4. Configure your Bitcoin Core settings in `.bitcoin/bitcoin.conf`
-5. Start Bitcoin Core in regtest mode:
+5. Start Bitcoin Core in regtest mode with explicit RPC settings:
 ```bash
-bitcoind -regtest -daemon
+bitcoind -regtest -server -rpcuser=bitcoin -rpcpassword=bitcoin -rpcport=18443 -rpcallowip=127.0.0.1 -rpcbind=127.0.0.1 -fallbackfee=0.0002 -daemon
 ```
    - Regtest mode creates a local blockchain for testing
    - No need to wait for block downloads
-   - Check status with `bitcoin-cli -regtest getblockchaininfo`
-   - Generate blocks with `bitcoin-cli -regtest generatetoaddress 101 $(bitcoin-cli -regtest getnewaddress)`
+   - Check status with `bitcoin-cli -regtest -rpcuser=bitcoin -rpcpassword=bitcoin -rpcport=18443 getblockchaininfo`
 6. To stop the Bitcoin Core daemon:
 ```bash
-bitcoin-cli -regtest stop
+bitcoin-cli -regtest -rpcuser=bitcoin -rpcpassword=bitcoin -rpcport=18443 stop
 ```
 
 > Note: Regtest mode is recommended for development as it allows you to create a local blockchain without real Bitcoin.
